@@ -3,9 +3,11 @@ import tqdm
 import torch
 import random
 
+import vocab
+
 
 class BERTDataset(Dataset):
-  def __init__(self, source_path, target_path, vocab, seq_len, encoding="utf-8", corpus_lines=None):
+               def __init__(self, source_path, target_path, vocab, seq_len, encoding="utf-8", corpus_lines=None):
     self.vocab = vocab
     self.seq_len = seq_len
 
@@ -31,11 +33,11 @@ class BERTDataset(Dataset):
   def __getitem__(self, item):
     t1, t2 = self.get_corpus_line(item)
     # t1, t2, is_next_label = self.random_sent(item)
-    t1_random, t1_label = self.random_word(t1)
+    t1_random = self.random_word(t1)
 
     # [CLS] tag = SOS tag, [SEP] tag = EOS tag
-    t1 = [self.vocab.sos_index] + t1_random + [self.vocab.eos_index]
-    t2 = t2_random + [self.vocab.eos_index]
+    t1 = [self.vocab.SOS] + t1_random + [self.vocab.EOS]
+    t2 = t2 + [self.vocab.EOS]
 
     # t1_label = [self.vocab.pad_index] + t1_label + [self.vocab.pad_index]
     # t2_label = t2_label + [self.vocab.pad_index]
@@ -44,8 +46,14 @@ class BERTDataset(Dataset):
     # bert_input = (t1 + t2)[:self.seq_len]
     # bert_label = (t1_label + t2_label)[:self.seq_len]
 
-    padding = [self.vocab.pad_index for _ in range(self.seq_len - len(bert_input))]
-    bert_input.extend(padding), bert_label.extend(padding), segment_label.extend(padding)
+    # for t1 (english)
+    padding = [self.vocab.PAD for _ in range(self.seq_len - len(t1))]
+    t1.extend(padding)
+    
+    # for t2 (japanese)
+    padding = [self.vocab.PAD for _ in range(self.seq_len - len(t2))]
+    t2.extend(padding)
+
 
     output = {"bert_input": bert_input,
               "bert_label": bert_label,
@@ -79,9 +87,9 @@ class BERTDataset(Dataset):
 
         else:
             tokens[i] = self.vocab.stoi.get(token, self.vocab.unk_index)
-            output_label.append(0)
+            # output_label.append(0)
 
-    return tokens, output_label
+    return tokens
 
   def random_sent(self, index):
       t1, t2 = self.get_corpus_line(index)
