@@ -39,8 +39,8 @@ class BERTDataset(Dataset):
     t1_random = self.random_word(t1)
 
     # [CLS] tag = SOS tag, [SEP] tag = EOS tag
-    t1 = [vocab.SOS] + t1_random + [vocab.EOS]
-    t2 = [vocab.SOS] + t2 + [vocab.EOS]
+    t1 = [vocab.BOS] + t1_random + [vocab.EOS]
+    t2 = [vocab.BOS] + t2 + [vocab.EOS]
 
     # t1_label = [vocab.pad_index] + t1_label + [vocab.pad_index]
     # t2_label = t2_label + [vocab.pad_index]
