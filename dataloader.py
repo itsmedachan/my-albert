@@ -2,11 +2,12 @@ from torch.utils.data import Dataset
 import tqdm
 import torch
 import random
+import numpy as np
 
 import vocab
 
 
-class JESCDataloades:
+class JESCDataloaders:
   def __init__(self, data_paths, en_tokenizer, ja_tokenizer, option, vocab_size=16000):
     self.en_train = data_paths["train"]["english"]
     self.ja_train = data_paths["train"]["japanese"]
