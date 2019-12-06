@@ -23,7 +23,7 @@ class albertTrainer:
     self.option = option
     self.device = device
 
-    self.criterion = nn.NLLoss(ingore_index=vocab.PAD)
+    self.criterion = nn.NLLLoss(ignore_index=vocab.PAD)
 
     # self.use_apex = use_apex
 

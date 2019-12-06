@@ -34,6 +34,7 @@ class JESCDataloaders:
             seq_len=self.option.seq_len,
             en_tokenizer=self.en_tokenizer,
             ja_tokenizer=self.ja_tokenizer,
+            vocab_size=self.vocab_size,
         ),
         batch_size=self.option.batch_size,
         shuffle=True,
@@ -47,6 +48,8 @@ class JESCDataloaders:
             seq_len=self.option.seq_len,
             en_tokenizer=self.en_tokenizer,
             ja_tokenizer=self.ja_tokenizer,
+            vocab_size=self.vocab_size,
+
         ),
         batch_size=self.option.batch_size,
         num_workers=2,
@@ -59,6 +62,8 @@ class JESCDataloaders:
             seq_len=self.option.seq_len,
             en_tokenizer=self.en_tokenizer,
             ja_tokenizer=self.ja_tokenizer,
+            vocab_size=self.vocab_size,
+
         ),
         batch_size=self.option.batch_size,
         num_workers=2,
@@ -66,12 +71,12 @@ class JESCDataloaders:
 
 
 class JESCDataset(Dataset):
-  def __init__(self, source_path, target_path, seq_len, en_tokenizer, ja_tokenizer, corpus_lines=None):
+  def __init__(self, source_path, target_path, seq_len, en_tokenizer, ja_tokenizer, vocab_size, corpus_lines=None):
     self.seq_len = seq_len
     self.en_tokenizer = en_tokenizer
     self.ja_tokenizer = ja_tokenizer
     self.corpus_lines = corpus_lines
-    self.encoding = encoding
+    self.vocab_size = vocab_size
 
     with open(source_path, "r", encoding="utf-8") as f:
       en_lines = [
@@ -123,10 +128,7 @@ class JESCDataset(Dataset):
 
     return {key: torch.tensor(value) for key, value in output.items()}
 
-  def random_word(self, sentence):
-    tokens = sentence.split()
-    output_label = []
-
+  def random_word(self, tokens):
     for i, token in enumerate(tokens):
       prob = random.random()
       if prob < 0.15:
@@ -134,23 +136,15 @@ class JESCDataset(Dataset):
 
         # 80% randomly change token to mask token
         if prob < 0.8:
-          tokens[i] = vocab.mask_index
+          tokens[i] = vocab.MASK
 
         # 10% randomly change token to random token
         elif prob < 0.9:
-          tokens[i] = random.randrange(len(vocab))
+          tokens[i] = random.randrange(self.vocab_size)
 
         # 10% randomly change token to current token
         else:
-          tokens[i] = vocab.stoi.get(
-              token, vocab.unk_index)
-
-        output_label.append(vocab.stoi.get(
-            token, vocab.unk_index))
-
-      else:
-        tokens[i] = vocab.stoi.get(token, vocab.unk_index)
-        # output_label.append(0)
+          continue
 
     return tokens
 

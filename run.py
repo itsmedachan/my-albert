@@ -2,7 +2,7 @@ import math
 import datetime
 import argparse
 import torch
-from transformers import AlbertModel
+from transformers import AlbertModel, AlbertConfig
 from transformers.optimization import AdamW, get_linear_schedule_with_warmup
 
 from trainer import albertTrainer
@@ -11,9 +11,9 @@ from tokenizer import SentencePieceTokenizer
 
 
 def main():
-  parser = argparse.ArgmentParser()
+  parser = argparse.ArgumentParser()
   parser.add_argument('-epoch', type=int, default=30)
-  parser.add_argument('-batch_size', type=int, default=16)
+  parser.add_argument('-batch_size', type=int, default=8)
 
   parser.add_argument('-seq_len', type=int, default=128)
   parser.add_argument('-learning_rate', type=float, default=0.001)
@@ -34,23 +34,24 @@ def main():
   print('[Info] log files: ', option.log)
 
   print('[Info] building tokenizer')
-  en_tokenizer = SentencePieceTokenizer("../my-spm/enwiki.model")
-  ja_tokenizer = SentencePieceTokenizer("../my-spm/jawiki.model")
+  en_tokenizer = SentencePieceTokenizer("my-spm/enwiki.model")
+  ja_tokenizer = SentencePieceTokenizer("my-spm/jawiki.model")
 
   print('[Info] building dataloader')
   data_paths = {
-      "train": {"english": "", "japanese": ""},
+      "train": {"english": "./data/en_train", "japanese": "./data/ja_train"},
       "valid": {"english": "", "japanese": ""},
       "test": {"english": "", "japanese": ""},
   }
   dataloaders = JESCDataloaders(data_paths, en_tokenizer, ja_tokenizer, option)
 
   print('[Info] building albert')
-  model = AlbertModel()
+  config = AlbertConfig(vocab_size_or_config_json_file=16000)
+  model = AlbertModel(config=config)
 
   device = torch.device('cuda:0' if not option.no_cuda else 'cpu')
 
-  print('[Info]　preparing optimizer')
+  print('[Info] preparing optimizer')
   # Parameters:
   lr = option.learning_rate
   data_size = dataloaders.train.__len__()
@@ -60,7 +61,7 @@ def main():
   # In Transformers, optimizer and schedules are splitted and instantiated like this:
   # To reproduce BertAdam specific behavior set correct_bias=False
   optimizer = AdamW(model.parameters(), lr=lr, correct_bias=False)
-  scheduler = get_linear_schedule_with_warmup(
+  schedular = get_linear_schedule_with_warmup(
       optimizer, num_warmup_steps=num_warmup_steps, num_training_steps=num_training_steps)  # PyTorch scheduler
 
   print('[Info] building trainer')
