@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
@@ -6,9 +7,8 @@ import vocab
 from fastprogress import progress_bar
 
 
-
 class albertTrainer:
-  def __init__(self, model, dataloaders, optimizer, schedular, tokenizer, option, device):
+  def __init__(self, model, dataloaders, optimizer, schedular, option, device):
     self.model = model
 
     if torch.cuda.device_count() > 1 and device != torch.device("cpu"):
@@ -20,7 +20,6 @@ class albertTrainer:
     self.dataloaders = dataloaders
     self.optimizer = optimizer
     self.schedular = schedular
-    self.tokenizer = tokenizer
     self.option = option
     self.device = device
 
@@ -49,6 +48,7 @@ class albertTrainer:
         log_vf.write('epoch, loss, accuracy\n')
 
   def run(self):
+    start_time = time.time()
     epoch_num = self.option.epoch
     # step_num = self.option.step
     self.step = 0
@@ -63,6 +63,9 @@ class albertTrainer:
       self.draw_graph()
       # self.output_examples()
       print("[Info] successfully finished!")
+      end_time = time.time()
+      processing_time = end_time - start_time
+      print("[Info] processing time {}".format(processing_time))
 
   def train(self):
     self.iter(train=True)
@@ -101,6 +104,8 @@ class albertTrainer:
 
       if train:
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(
+            model.parameters(), self.option.max_grad_norm)
         self.optimizer.step()
         self.optimizer.zero_grad()
         self.step += 1
