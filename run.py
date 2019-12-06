@@ -8,6 +8,7 @@ from transformers.optimization import AdamW, get_linear_schedule_with_warmup
 from trainer import albertTrainer
 from dataloader import JESCDataloaders
 from tokenizer import SentencePieceTokenizer
+from model import myAlbertModel
 
 
 def main():
@@ -47,7 +48,8 @@ def main():
 
   print('[Info] building albert')
   config = AlbertConfig(vocab_size_or_config_json_file=16000)
-  model = AlbertModel(config=config)
+  albert = AlbertModel(config=config)
+  model = myAlbertModel(albert)
 
   device = torch.device('cuda:0' if not option.no_cuda else 'cpu')
 
