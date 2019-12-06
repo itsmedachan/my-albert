@@ -9,10 +9,10 @@ import vocab
 
 
 class albertModel(nn.Module):
-  def __init__(self, albert, d_model=33, n_vocab=16000, dropout=0.1):
+  def __init__(self, albert, d_model=33, vocab_size=16000, dropout=0.1):
     super().__init__()
     self.albert = albert
-    self.linear = nn.Linear(d_model, n_vocab)
+    self.linear = nn.Linear(d_model, vocab_size)
 
   def forward(self, src):
     output = self.albert(src)
