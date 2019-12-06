@@ -150,3 +150,10 @@ class albertTrainer:
     x = np.arrange(self.epoch)
     y = np.array([self.log["train"]["loss"], self.log["valid"]["loss"]]).T
     plots = plt.plot(x, y)
+    plt.legend(plots, ("train", "valid"), loc="best", framealpha=0.25, prop={
+        "size": "small", "family": "monospace"
+    })
+    plt.xlabel("epoch")
+    plt.ylabel("loss")
+    plt.tight_layout()
+    plt.savefig(self.option)
