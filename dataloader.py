@@ -6,7 +6,65 @@ import random
 import vocab
 
 
-class BERTDataset(Dataset):
+class JESCDataloades:
+  def __init__(self, data_paths, en_tokenizer, ja_tokenizer, option, vocab_size=16000):
+    self.en_train = data_paths["train"]["english"]
+    self.ja_train = data_paths["train"]["japanese"]
+    self.en_valid = data_paths["valid"]["english"]
+    self.ja_valid = data_paths["valid"]["japanese"]
+    self.en_test = data_paths["test"]["english"]
+    self.ja_test = data_paths["test"]["japanese"]
+    self.en_tokenizer = en_tokenizer
+    self.ja_tokenizer = ja_tokenizer
+    self.option = option
+    self.vocab_size = vocab_size
+
+    self.prepare_dataloaders()
+
+  def prepare_dataloaders(self):
+    # initialize seed
+    np.random.seed(0)
+    torch.manual_seed(0)
+    # prepare data
+    self.train = torch.utils.data.DataLoader(
+        JESCDataset(
+            source_path=self.en_train,
+            target_path=self.ja_train,
+            seq_len=self.option.seq_len,
+            en_tokenizer=self.en_tokenizer,
+            ja_tokenizer=self.ja_tokenizer,
+        ),
+        batch_size=self.option.batch_size,
+        shuffle=True,
+        num_workers=2,
+    )
+
+    self.valid = torch.utils.data.DataLoader(
+        JESCDataset(
+            source_path=self.en_valid,
+            target_path=self.ja_valid,
+            seq_len=self.option.seq_len,
+            en_tokenizer=self.en_tokenizer,
+            ja_tokenizer=self.ja_tokenizer,
+        ),
+        batch_size=self.option.batch_size,
+        num_workers=2,
+    )
+
+    self.test = torch.utils.data.DataLoader(
+        JESCDataset(
+            source_path=self.en_test,
+            target_path=self.ja_test,
+            seq_len=self.option.seq_len,
+            en_tokenizer=self.en_tokenizer,
+            ja_tokenizer=self.ja_tokenizer,
+        ),
+        batch_size=self.option.batch_size,
+        num_workers=2,
+    )
+
+
+class JESCDataset(Dataset):
   def __init__(self, source_path, target_path, seq_len, en_tokenizer, ja_tokenizer, corpus_lines=None):
     self.seq_len = seq_len
     self.en_tokenizer = en_tokenizer
