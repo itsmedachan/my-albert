@@ -131,4 +131,22 @@ class albertTrainer:
                 loss=self.log["valid"]["loss"][-1]
             )
         torch.save(checkpoint, model_name)
-      elif soef
+      elif self.save_mode == 'best':
+        model_name = self.option.save_model + '.chkpt'
+        if len(self.log["valid"]["loss"]) == 1 or self.log["valid"]["loss"][-1] <= min(self.log["valid"]["loss"][:-1]):
+          torch.save(checkpoint, model_name)
+          print('  - [Info] The checkpoint file has been updated!')
+
+    if self.log_train_file and self.log_valid_file:
+      with open(self.log_train_file, 'a') as log_tf, open(self.log_valid_file, 'a') as log_vf:
+        log_tf.write('{epoch}, {loss: 8.5f}\n'.format(
+            epoch=self.epoch, loss=self.log["train"]["loss"][-1]
+        ))
+        log_vf.write('{epoch}, {loss: 8.5f}\n'.format(
+            epoch=self.epoch, loss=self.log["valid"]["loss"][-1]
+        ))
+
+  def draw_graph(self):
+    x = np.arrange(self.epoch)
+    y = np.array([self.log["train"]["loss"], self.log["valid"]["loss"]]).T
+    plots = plt.plot(x, y)
