@@ -156,4 +156,4 @@ class albertTrainer:
     plt.xlabel("epoch")
     plt.ylabel("loss")
     plt.tight_layout()
-    plt.savefig(self.option)
+    plt.savefig(self.option.log + "_graph.png")
