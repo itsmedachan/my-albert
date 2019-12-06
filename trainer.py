@@ -95,8 +95,8 @@ class albertTrainer:
 
       # calc loss
       loss = self.criterion(
-          output.view(-1, self.ja_tokenizer.vocab_size),
-          tgt.view(-1, self.ja_tokenizer.vocab_size)
+          output.view(-1, self.option.vocab_size),
+          tgt.view(-1),
       )
 
       if torch.cuda.device_count() > 1:
@@ -105,7 +105,7 @@ class albertTrainer:
       if train:
         loss.backward()
         torch.nn.utils.clip_grad_norm_(
-            model.parameters(), self.option.max_grad_norm)
+            self.model.parameters(), self.option.max_grad_norm)
         self.optimizer.step()
         self.optimizer.zero_grad()
         self.step += 1

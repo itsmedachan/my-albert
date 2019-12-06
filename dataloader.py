@@ -8,7 +8,7 @@ import vocab
 
 
 class JESCDataloaders:
-  def __init__(self, data_paths, en_tokenizer, ja_tokenizer, option, vocab_size=16000):
+  def __init__(self, data_paths, en_tokenizer, ja_tokenizer, option):
     self.en_train = data_paths["train"]["english"]
     self.ja_train = data_paths["train"]["japanese"]
     self.en_valid = data_paths["valid"]["english"]
@@ -18,7 +18,7 @@ class JESCDataloaders:
     self.en_tokenizer = en_tokenizer
     self.ja_tokenizer = ja_tokenizer
     self.option = option
-    self.vocab_size = vocab_size
+    self.vocab_size = option.vocab_size
 
     self.prepare_dataloaders()
 
