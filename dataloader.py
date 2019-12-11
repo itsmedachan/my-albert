@@ -49,7 +49,6 @@ class JESCDataloaders:
             en_tokenizer=self.en_tokenizer,
             ja_tokenizer=self.ja_tokenizer,
             vocab_size=self.vocab_size,
-
         ),
         batch_size=self.option.batch_size,
         num_workers=2,
@@ -63,7 +62,6 @@ class JESCDataloaders:
             en_tokenizer=self.en_tokenizer,
             ja_tokenizer=self.ja_tokenizer,
             vocab_size=self.vocab_size,
-
         ),
         batch_size=self.option.batch_size,
         num_workers=2,
