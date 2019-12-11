@@ -14,11 +14,12 @@ from model import myAlbertModel
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-epoch', type=int, default=30)
-  parser.add_argument('-batch_size', type=int, default=16)
+  parser.add_argument('-batch_size', type=int, default=24)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
-  parser.add_argument('-hidden_size', type=int, default=2048) # official: 4096
-  parser.add_argument('-num_hidden_layers', type=int, default=6) #official: 12
+  parser.add_argument('-hidden_size', type=int, default=1024)  # official: 4096
+  parser.add_argument('-num_hidden_layers', type=int,
+                      default=6)  # official: 12
   parser.add_argument('-seq_len', type=int, default=128)
   parser.add_argument('-learning_rate', type=float, default=0.001)
   parser.add_argument('-warmup_proportion', type=float, default=0.1)
@@ -51,10 +52,10 @@ def main():
 
   print('[Info] building albert')
   config = AlbertConfig(
-    vocab_size_or_config_json_file=option.vocab_size,
-    hidden_size=option.hidden_size,
-    num_hidden_layers=option.num_hidden_layers,
-    )
+      vocab_size_or_config_json_file=option.vocab_size,
+      hidden_size=option.hidden_size,
+      num_hidden_layers=option.num_hidden_layers,
+  )
   albert = AlbertModel(config=config)
   model = myAlbertModel(albert, d_model=option.hidden_size)
 
