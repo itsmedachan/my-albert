@@ -14,7 +14,7 @@ from model import myAlbertModel
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-epoch', type=int, default=30)
-  parser.add_argument('-batch_size', type=int, default=24)
+  parser.add_argument('-batch_size', type=int, default=48)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
   parser.add_argument('-hidden_size', type=int, default=1024)  # official: 4096
