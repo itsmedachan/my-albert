@@ -38,7 +38,7 @@ class JESCDataloaders:
         ),
         batch_size=self.option.batch_size,
         shuffle=True,
-        num_workers=2,
+        num_workers=1,
     )
 
     self.valid = torch.utils.data.DataLoader(
@@ -51,7 +51,7 @@ class JESCDataloaders:
             vocab_size=self.vocab_size,
         ),
         batch_size=self.option.batch_size,
-        num_workers=2,
+        num_workers=1,
     )
 
     self.test = torch.utils.data.DataLoader(
@@ -64,7 +64,7 @@ class JESCDataloaders:
             vocab_size=self.vocab_size,
         ),
         batch_size=self.option.batch_size,
-        num_workers=2,
+        num_workers=1,
     )
 
 
