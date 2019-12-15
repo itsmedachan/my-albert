@@ -57,9 +57,9 @@ class albertTrainer:
       # while self.step < step_num:
       self.epoch += 1
       self.train()
-      self.save()
       self.valid()
       self.schedular.step()
+      self.save()
       self.draw_graph()
       # self.output_examples()
       print("[Info] successfully finished!")
