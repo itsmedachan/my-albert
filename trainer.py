@@ -155,7 +155,7 @@ class albertTrainer:
         ))
 
   def draw_graph(self):
-    x = np.arrange(self.epoch)
+    x = np.arange(self.epoch)
     y = np.array([self.log["train"]["loss"], self.log["valid"]["loss"]]).T
     plots = plt.plot(x, y)
     plt.legend(plots, ("train", "valid"), loc="best", framealpha=0.25, prop={
