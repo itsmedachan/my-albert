@@ -13,8 +13,8 @@ class JESCDataloaders:
     self.ja_train = data_paths["train"]["japanese"]
     self.en_valid = data_paths["valid"]["english"]
     self.ja_valid = data_paths["valid"]["japanese"]
-    self.en_test = data_paths["test"]["english"]
-    self.ja_test = data_paths["test"]["japanese"]
+    # self.en_test = data_paths["test"]["english"]
+    # self.ja_test = data_paths["test"]["japanese"]
     self.en_tokenizer = en_tokenizer
     self.ja_tokenizer = ja_tokenizer
     self.option = option
