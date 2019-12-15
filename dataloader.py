@@ -54,18 +54,18 @@ class JESCDataloaders:
         num_workers=0,
     )
 
-    self.test = torch.utils.data.DataLoader(
-        JESCDataset(
-            source_path=self.en_test,
-            target_path=self.ja_test,
-            seq_len=self.option.seq_len,
-            en_tokenizer=self.en_tokenizer,
-            ja_tokenizer=self.ja_tokenizer,
-            vocab_size=self.vocab_size,
-        ),
-        batch_size=self.option.batch_size,
-        num_workers=0,
-    )
+    # self.test = torch.utils.data.DataLoader(
+    #     JESCDataset(
+    #         source_path=self.en_test,
+    #         target_path=self.ja_test,
+    #         seq_len=self.option.seq_len,
+    #         en_tokenizer=self.en_tokenizer,
+    #         ja_tokenizer=self.ja_tokenizer,
+    #         vocab_size=self.vocab_size,
+    #     ),
+    #     batch_size=self.option.batch_size,
+    #     num_workers=0,
+    # )
 
 
 class JESCDataset(Dataset):

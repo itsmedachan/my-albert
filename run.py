@@ -46,7 +46,7 @@ def main():
   data_paths = {
       "train": {"english": "data/en_train", "japanese": "data/ja_train"},
       "valid": {"english": "data/en_valid", "japanese": "data/ja_valid"},
-      "test": {"english": "data/en_test", "japanese": "data/ja_test"},
+      #   "test": {"english": "data/en_test", "japanese": "data/ja_test"},
   }
   dataloaders = JESCDataloaders(data_paths, en_tokenizer, ja_tokenizer, option)
 
