@@ -17,11 +17,10 @@ def main():
   parser.add_argument('-batch_size', type=int, default=36)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
-  parser.add_argument('-hidden_size', type=int, default=1024)  # official: 4096
-  parser.add_argument('-num_hidden_layers', type=int,
-                      default=6)  # official: 12
+  parser.add_argument('-hidden_size', type=int, default=768)
+  parser.add_argument('-num_hidden_layers', type=int, default=12)
   parser.add_argument('-seq_len', type=int, default=128)
-  parser.add_argument('-learning_rate', type=float, default=0.001)
+  parser.add_argument('-learning_rate', type=float, default=0.0001)
   parser.add_argument('-warmup_proportion', type=float, default=0.1)
   parser.add_argument('-max_grad_norm', type=float, default=1.0)
 

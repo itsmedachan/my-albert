@@ -19,11 +19,10 @@ def main():
   parser.add_argument('-batch_size', type=int, default=18)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
-  parser.add_argument('-hidden_size', type=int, default=1024)  # official: 4096
-  parser.add_argument('-num_hidden_layers', type=int,
-                      default=6)  # official: 12
+  parser.add_argument('-hidden_size', type=int, default=768)
+  parser.add_argument('-num_hidden_layers', type=int, default=12)
   parser.add_argument('-seq_len', type=int, default=128)
-#   parser.add_argument('-learning_rate', type=float, default=0.001)
+#   parser.add_argument('-learning_rate', type=float, default=0.0001)
 #   parser.add_argument('-warmup_proportion', type=float, default=0.1)
 #   parser.add_argument('-max_grad_norm', type=float, default=1.0)
 
@@ -107,13 +106,13 @@ def main():
 #   trainer.run()
 
 def fix_model_state_dict(state_dict):
-    new_state_dict = collections.OrderedDict()
-    for k, v in state_dict.items():
-        name = k
-        if name.startswith('module.'):
-            name = name[7:]  # remove 'module.' of dataparallel
-        new_state_dict[name] = v
-    return new_state_dict
+  new_state_dict = collections.OrderedDict()
+  for k, v in state_dict.items():
+    name = k
+    if name.startswith('module.'):
+      name = name[7:]  # remove 'module.' of dataparallel
+    new_state_dict[name] = v
+  return new_state_dict
 
 
 if __name__ == '__main__':
