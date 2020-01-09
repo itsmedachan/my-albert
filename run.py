@@ -14,7 +14,7 @@ from model import myAlbertModel
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-epoch', type=int, default=30)
-  parser.add_argument('-batch_size', type=int, default=36)
+  parser.add_argument('-batch_size', type=int, default=256)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
   parser.add_argument('-hidden_size', type=int, default=768)
@@ -55,8 +55,8 @@ def main():
       hidden_size=option.hidden_size,
       num_hidden_layers=option.num_hidden_layers,
   )
-#   albert = AlbertModel(config=config)
-  albert = AlbertModel.from_pretrained('albert-base-v1')
+  albert = AlbertModel(config=config)
+#   albert = AlbertModel.from_pretrained('albert-base-v1')
   model = myAlbertModel(albert, d_model=option.hidden_size)
 
   device = torch.device('cuda:0' if not option.no_cuda else 'cpu')
