@@ -25,7 +25,7 @@ def calc_bleu():
         target_tokens = ja_tokenizer.text_to_tokens(target)
 
         targets = [target_tokens]
-        sentence_bleu = nltk.translate.bleu_score.sentence_blue(
+        sentence_bleu = nltk.translate.bleu_score.sentence_bleu(
             targets, prediction_tokens)
         corpus_bleu += sentence_bleu
       except:
