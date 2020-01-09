@@ -19,7 +19,7 @@ def main():
   parser.add_argument('-batch_size', type=int, default=18)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
-  parser.add_argument('-hidden_size', type=int, default=768)
+  parser.add_argument('-hidden_size', type=int, default=768) # ここ
   parser.add_argument('-num_hidden_layers', type=int, default=12)
   parser.add_argument('-seq_len', type=int, default=128)
 #   parser.add_argument('-learning_rate', type=float, default=0.0001)
