@@ -1,7 +1,9 @@
 data/
 log_files/
 log_files1/
+log_files2/
 model/
-model1
+model1/
+model2/
 result/
 __pycache__/
