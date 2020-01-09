@@ -11,3 +11,6 @@ class SentencePieceTokenizer:
 
   def ids_to_text(self, input_ids):
     return self.sp.DecodeIds(input_ids)
+
+  def text_to_tokens(self, input_text):
+    return self.sp.EncodeAsPieces(input_text)
