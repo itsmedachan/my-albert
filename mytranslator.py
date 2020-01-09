@@ -4,6 +4,7 @@ import torch.nn as nn
 import numpy as np
 import vocab
 from fastprogress import progress_bar
+import pandas as pd
 
 
 class myTranslator:
@@ -27,6 +28,11 @@ class myTranslator:
     dataloader = self.dataloader
 
     data_iter = progress_bar(dataloader)
+
+    input_english_list = []
+    target_japanese_list = []
+    output_japanese_list = []
+
     for i, batch in enumerate(data_iter):
       src = batch["input_english"].to(self.device)
       tgt = batch["target_japanese"].to(self.device)
@@ -42,5 +48,12 @@ class myTranslator:
         output_japanese = output[n].tolist()
 
         input_english = self.en_tokenizer.ids_to_text(input_english)
+        input_english_list.append(input_english)
         target_japanese = self.ja_tokenizer.ids_to_text(target_japanese)
+        target_japanese_list.append(target_japanese)
         output_japanese = self.ja_tokenizer.ids_to_text(output_japanese)
+        output_japanese_list.append(output_japanese)
+
+    df = pd.DataFrame(
+        [input_english_list, output_japanese_list, target_japanese_list]).T
+    df.to_csv(self.result_file)
