@@ -56,7 +56,8 @@ def main():
       hidden_size=option.hidden_size,
       num_hidden_layers=option.num_hidden_layers,
   )
-  albert = AlbertModel(config=config)
+#   albert = AlbertModel(config=config)
+  albert = AlbertModel.from_pretrained('albert-base-v1')
   model = myAlbertModel(albert, d_model=option.hidden_size)
 
   device = torch.device('cuda:0' if not option.no_cuda else 'cpu')
