@@ -45,5 +45,5 @@ def calc_bleu():
     print("corpus_bleu:", corpus_bleu)
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
   calc_bleu()
