@@ -32,15 +32,15 @@ class myTranslator:
       tgt = batch["target_japanese"].to(self.device)
 
       output = self.model(src)
-      print(output.size())
+      # print(output.size())
       output = torch.argmax(output, dim=-1)
       output = output.cpu().numpy()
 
       for n in range(len(src)):
-        input_english = batch["input_english"][n]
-        target_japanese = batch["target_japanese"][n]
-        output_japanese = output[n]
+        input_english = batch["input_english"][n].tolist()
+        target_japanese = batch["target_japanese"][n].tolist()
+        output_japanese = output[n].tolist()
 
         input_english = self.en_tokenizer.ids_to_text(input_english)
         target_japanese = self.ja_tokenizer.ids_to_text(target_japanese)
-        output_japanese = self.ja_tokenizer.ids_to_text(input_english)
+        output_japanese = self.ja_tokenizer.ids_to_text(output_japanese)

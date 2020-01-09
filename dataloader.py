@@ -69,12 +69,13 @@ class JESCDataloaders:
 
 
 class JESCDataset(Dataset):
-  def __init__(self, source_path, target_path, seq_len, en_tokenizer, ja_tokenizer, vocab_size, corpus_lines=None):
+  def __init__(self, source_path, target_path, seq_len, en_tokenizer, ja_tokenizer, vocab_size, corpus_lines=None, train=True):
     self.seq_len = seq_len
     self.en_tokenizer = en_tokenizer
     self.ja_tokenizer = ja_tokenizer
     self.corpus_lines = corpus_lines
     self.vocab_size = vocab_size
+    self.train = train
 
     with open(source_path, "r", encoding="utf-8") as f:
       en_lines = [
@@ -98,10 +99,13 @@ class JESCDataset(Dataset):
     t1 = self.en_tokenizer.text_to_ids(t1)
     t2 = self.ja_tokenizer.text_to_ids(t2)
     # t1, t2, is_next_label = self.random_sent(item)
-    t1_random = self.random_word(t1)
+    if self.train:
+      t1_random = self.random_word(t1)
+      t1 = [vocab.BOS] + t1_random + [vocab.EOS]
+    else:
+      t1 = [vocab.BOS] + t1 + [vocab.EOS]
 
     # [CLS] tag = SOS tag, [SEP] tag = EOS tag
-    t1 = [vocab.BOS] + t1_random + [vocab.EOS]
     t2 = [vocab.BOS] + t2 + [vocab.EOS]
 
     # t1_label = [vocab.pad_index] + t1_label + [vocab.pad_index]

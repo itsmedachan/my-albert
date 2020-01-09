@@ -4,17 +4,19 @@ import argparse
 import torch
 from transformers import AlbertModel, AlbertConfig
 from transformers.optimization import AdamW, get_linear_schedule_with_warmup
+import collections
 
 from trainer import albertTrainer
 from dataloader import JESCDataloaders, JESCDataset
 from tokenizer import SentencePieceTokenizer
 from model import myAlbertModel
+from mytranslator import myTranslator
 
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-epoch', type=int, default=30)
-  parser.add_argument('-batch_size', type=int, default=36)
+  parser.add_argument('-batch_size', type=int, default=18)
 
   parser.add_argument('-vocab_size', type=int, default=16000)
   parser.add_argument('-hidden_size', type=int, default=1024)  # official: 4096
@@ -51,6 +53,7 @@ def main():
           en_tokenizer=en_tokenizer,
           ja_tokenizer=ja_tokenizer,
           vocab_size=option.vocab_size,
+          train=False,
       ),
       batch_size=option.batch_size,
       num_workers=0,
@@ -68,11 +71,19 @@ def main():
   print('[Info] loading pretrained model')
   PATH = './model/trained_loss_4.712.chkpt'
   checkpoint = torch.load(PATH)
-  model.load_state_dict(checkpoint["model"])
+  state_dict = fix_model_state_dict(checkpoint['model'])
+  model.load_state_dict(state_dict)
 
   device = torch.device('cuda:0' if not option.no_cuda else 'cpu')
 
   result_file = './result/result_' + now + '.csv'
+
+  print('[Info] building translator')
+  translator = myTranslator(
+      model, dataloader, device, en_tokenizer, ja_tokenizer, result_file
+  )
+  translator.translate()
+
 
 #   print('[Info] preparing optimizer')
 #   # Parameters:
@@ -94,6 +105,15 @@ def main():
 
 #   print('[Info] training start!')
 #   trainer.run()
+
+def fix_model_state_dict(state_dict):
+    new_state_dict = collections.OrderedDict()
+    for k, v in state_dict.items():
+        name = k
+        if name.startswith('module.'):
+            name = name[7:]  # remove 'module.' of dataparallel
+        new_state_dict[name] = v
+    return new_state_dict
 
 
 if __name__ == '__main__':
