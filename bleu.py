@@ -7,7 +7,7 @@ from tokenizer import SentencePieceTokenizer
 
 
 def calc_bleu():
-  df = pd.read_csv("result/result_2020_01_09_14_47.csv")
+  df = pd.read_csv("result/result_2020_01_09_14_47.csv") # ここ
   en_tokenizer = SentencePieceTokenizer("my-spm/enwiki.model")
   ja_tokenizer = SentencePieceTokenizer("my-spm/jawiki.model")
 

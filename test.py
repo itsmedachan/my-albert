@@ -68,7 +68,7 @@ def main():
   model = myAlbertModel(albert, d_model=option.hidden_size)
 
   print('[Info] loading pretrained model')
-  PATH = './model/trained_loss_4.712.chkpt'
+  PATH = './model/trained_loss_4.712.chkpt' # ここ
   checkpoint = torch.load(PATH)
   state_dict = fix_model_state_dict(checkpoint['model'])
   model.load_state_dict(state_dict)
