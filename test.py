@@ -20,6 +20,8 @@ def main():
 
   parser.add_argument('-vocab_size', type=int, default=16000)
   parser.add_argument('-hidden_size', type=int, default=768) # ここ
+  parser.add_argument('-num_attention_heads', type=int, default=12) # ここ
+  parser.add_argument('-intermediate_size', type=int, default=3074) # ここ
   parser.add_argument('-num_hidden_layers', type=int, default=12)
   parser.add_argument('-seq_len', type=int, default=128)
 #   parser.add_argument('-learning_rate', type=float, default=0.0001)
@@ -63,12 +65,14 @@ def main():
       vocab_size_or_config_json_file=option.vocab_size,
       hidden_size=option.hidden_size,
       num_hidden_layers=option.num_hidden_layers,
+      num_attention_heads=option.num_attention_heads,
+      intermediate_size=option.intermediate_size,
   )
   albert = AlbertModel(config=config)
   model = myAlbertModel(albert, d_model=option.hidden_size)
 
   print('[Info] loading pretrained model')
-  PATH = './model/trained_loss_4.712.chkpt' # ここ
+  PATH = './model/trained_loss_4.044.chkpt' # ここ
   checkpoint = torch.load(PATH)
   state_dict = fix_model_state_dict(checkpoint['model'])
   model.load_state_dict(state_dict)
